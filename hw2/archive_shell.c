@@ -20,13 +20,18 @@ int main()
     int pid, size, fd1, fd2;
 
     printf("Entering Archive Shell...\n");
-    printf("Archive $** ");
 
     while (1)
     {
         printf("Archive $** ");
-        if (fgets(input, BUFFER, stdin) == NULL || strcmp("Esc\n", input) == 0)
-            break;
+        if (fgets(input, BUFFER, stdin) == NULL)
+        {
+            perror("fgets failed!\n");
+            exit(1);
+        }
+
+        // Stop condition
+        if (strcmp("Esc\n", input) == 0) break;
 
         input[strcspn(input, "\n")] = '\0';
 
@@ -42,6 +47,12 @@ int main()
         args[i] = NULL;
         size = i;
 
+        // No arguments at all
+        if (args[0] == NULL)
+        {
+            printf("Not Supported\n");
+            continue;
+        }
         // merge <src> <dst>
         if (strcmp(args[0], "merge") == 0)
         {
@@ -51,6 +62,7 @@ int main()
             fd1 = open(args[2], O_RDWR | O_APPEND, 0664);
             if (fd1 < 0) printf("File %s not found", args[2]);
             merge(fd1, fd2);
+            printf("Data from %s merged into %s\n", args[1], args[2]);
         }
         // count <file>
         else if (strcmp(args[0], "count") == 0)

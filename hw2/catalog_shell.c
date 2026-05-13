@@ -16,10 +16,19 @@ int main()
     int size;
 
     printf("Entering Catalog Shell...\n");
-    printf("Catalog$** ");
 
-    while (fgets(input, BUFFER, stdin) != NULL && (strcmp("Esc\n", input) != 0))
+    while (1)
     {
+        printf("Catalog$** ");
+        if (fgets(input, BUFFER, stdin) == NULL)
+        {
+            perror("fgets failed!\n");
+            exit(1);
+        }
+
+        // Stop condition
+        if (strcmp("Esc\n", input) == 0) break;
+
         input[strcspn(input, "\n")] = '\0';
 
         // Tokenize arguments
@@ -45,26 +54,29 @@ int main()
         // Child
         if (pid == 0)
         {
+            // find command
             if (strcmp(args[0], "find") == 0)
             {
                 if (!enoughArgs(size, 3)) exit(1);
                 execvp("grep", args);
             }
+            // newcat command
             if (strcmp(args[0], "newcat") == 0)
             {
                 if (!enoughArgs(size, 2)) exit(1);
                 execvp("mkdir", args);
             }
+            // ls command
             if (strcmp(args[0], "ls") == 0)
             {
                 if (!enoughArgs(size, 2)) exit(1);
                 execvp(args[0], args);
             }
+            // run command
             if (strcmp(args[0], "run") == 0)
             {
                 if (!enoughArgs(size, 3)) exit(1);
                 execvp(args[1], args + 1);
-                // NEED TO RUN NOT ONLY BUILT IN COMMANDS???
             }
 
             // fails
@@ -75,7 +87,6 @@ int main()
         {
             wait(NULL);
         }
-        printf("Catalog$** ");
     }
     printf("Returning to LibShell...\n");
     return 0;
