@@ -58,9 +58,9 @@ int main()
         {
             if (!enoughArgs(size, 3)) continue;
             fd2 = open(args[1], O_RDONLY, 0664);
-            if (fd2 < 0) printf("File %s not found", args[1]);
+            if (fd2 < 0) printf("File %s not found\n", args[1]);
             fd1 = open(args[2], O_RDWR | O_APPEND, 0664);
-            if (fd1 < 0) printf("File %s not found", args[2]);
+            if (fd1 < 0) printf("File %s not found\n", args[2]);
             merge(fd1, fd2);
             printf("Data from %s merged into %s\n", args[1], args[2]);
         }
@@ -69,7 +69,7 @@ int main()
         {
             if (!enoughArgs(size, 2)) continue;
             fd1 = open(args[1], O_RDONLY, 0664);
-            if (fd1 < 0) printf("File %s not found", args[1]);
+            if (fd1 < 0) printf("File %s not found\n", args[1]);
             count(fd1);
         }
         // remove <file>
