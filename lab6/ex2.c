@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     int size = atoi(argv[1]);
 
     long int counters[size];
-    pthread_t tid[size];
+    pthread_t tid[size + 1];
     CounterArgs count_args[size];
 
     // Fill with zeros
@@ -42,10 +42,10 @@ int main(int argc, char* argv[])
 
         pthread_create(&tid[i], NULL, counter, &count_args[i]);
     }
-    pthread_create(&tid[size - 1], NULL, summary, &count_args);
+    pthread_create(&tid[size], NULL, summary, &count_args[0]);
 
     sleep(20);
-    return 0;
+    exit(0);
 }
 
 // Infinitely growing counter
