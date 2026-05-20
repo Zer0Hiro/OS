@@ -4,7 +4,7 @@
 #include <unistd.h>
 #define N 10
 
-void* search(void* pos);
+void *search(void *pos);
 
 int arr[N];
 int num;
@@ -17,10 +17,14 @@ int main()
     srand(time(NULL));
 
     // Fill arr with rand numbers 0-100
-    for (int i = 0; i < N; i++) arr[i] = rand() % 101;
+    for (int i = 0; i < N; i++)
+    {
+        arr[i] = rand() % 101;
+        printf("%d ", arr[i]);
+    }
 
     // Get number
-    printf("input: ");
+    printf("\ninput: ");
     scanf("%d", &num);
 
     // Create threads
@@ -51,12 +55,13 @@ int main()
     return 1;
 }
 
-void* search(void* pos)
+void *search(void *pos)
 {
-    for (int i = *(int*)pos; i < N; i += 2)
+    for (int i = *(int *)pos; i < N; i += 2)
     {
         // Check if other thread found
-        if (flag) return 0;
+        if (flag)
+            return 0;
 
         if (arr[i] == num)
         {
