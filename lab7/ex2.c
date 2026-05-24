@@ -4,17 +4,24 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define N 220
-#define M 284
-
-void* sum(void* args);
+void *sum(void *args);
 
 pthread_t tid[2];
 
-int main()
+int main(int argc, char *argv[])
 {
-    int arr[2] = {N, M};
+    if (argc < 3)
+    {
+        perror("Not enough arguments");
+        exit(0);
+    }
+
     void *sum1, *sum2;
+    int arr[2];
+
+    // Get args
+    arr[0] = atoi(argv[1]);
+    arr[1] = atoi(argv[2]);
 
     // Create threads
     pthread_create(&tid[0], NULL, sum, &arr[0]);
@@ -24,7 +31,7 @@ int main()
     pthread_join(tid[0], &sum1);
     pthread_join(tid[1], &sum2);
 
-    if (N == *(int*)sum2 && M == *(int*)sum1)
+    if (arr[0] == *(int *)sum2 && arr[1] == *(int *)sum1)
         printf("Amicable Numbers\n");
     else
         printf("Not Amicable Numbers\n");
@@ -35,9 +42,9 @@ int main()
     return 0;
 }
 
-void* sum(void* args)
+void *sum(void *args)
 {
-    int num = *(int*)args;
+    int num = *(int *)args;
     int sum = 1;
 
     // look for divisors
@@ -48,12 +55,13 @@ void* sum(void* args)
             sum += i;
             int temp = num / i;
 
-            if (i != temp) sum += temp;
+            if (i != temp)
+                sum += temp;
         }
     }
 
     // allocate memory for sum
-    int* result = malloc(sizeof(int));
+    int *result = malloc(sizeof(int));
     *result = sum;
 
     return result;
