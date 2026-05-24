@@ -6,7 +6,7 @@
 
 void* f(void* pid);
 
-int curId = 0;
+volatile int curId = 0;
 
 int main(int argc, char* argv[])
 {

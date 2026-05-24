@@ -4,18 +4,18 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-void* summary(void* args);
-void* counter(void* args);
+void *summary(void *args);
+void *counter(void *args);
 
 // Struct for counters/summary
 typedef struct
 {
     int tid;
     int size;
-    long int* counters;
+    long int *counters;
 } CounterArgs;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     if (argc < 2)
     {
@@ -26,12 +26,13 @@ int main(int argc, char* argv[])
     // Get amount of threads
     int size = atoi(argv[1]);
 
-    long int counters[size];
+    volatile long int counters[size];
     pthread_t tid[size + 1];
     CounterArgs count_args[size];
 
     // Fill with zeros
-    for (int i = 0; i < size; i++) counters[i] = 0;
+    for (int i = 0; i < size; i++)
+        counters[i] = 0;
 
     // Create counting threads
     for (int i = 0; i < size; i++)
@@ -49,13 +50,13 @@ int main(int argc, char* argv[])
 }
 
 // Infinitely growing counter
-void* counter(void* args)
+void *counter(void *args)
 {
     // get pointer of struct
-    CounterArgs* arguments = (CounterArgs*)args;
+    CounterArgs *arguments = (CounterArgs *)args;
 
     int id = arguments->tid;
-    long int* counter = arguments->counters;
+    long int *counter = arguments->counters;
 
     while (1)
     {
@@ -64,13 +65,13 @@ void* counter(void* args)
 }
 
 // Summerize all counters every 2 seconds
-void* summary(void* args)
+void *summary(void *args)
 {
     // get pointer of struct
-    CounterArgs* arguments = (CounterArgs*)args;
+    CounterArgs *arguments = (CounterArgs *)args;
 
     int size = arguments->size;
-    long int* counters = arguments->counters;
+    long int *counters = arguments->counters;
 
     while (1)
     {
