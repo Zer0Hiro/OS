@@ -30,13 +30,12 @@ int main()
             // Parent process
             default:
                 i = N;
+                // Wait for child process
+                wait(NULL);
                 break;
         }
     }
     // Print current number
     printf("%d ", c2);
-
-    // Wait for child process
-    wait(NULL);
     return 0;
 }

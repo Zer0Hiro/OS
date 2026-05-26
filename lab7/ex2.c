@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void *sum(void *args);
+void* sum(void* args);
 
 pthread_t tid[2];
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (argc < 3)
     {
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     pthread_join(tid[0], &sum1);
     pthread_join(tid[1], &sum2);
 
-    if (arr[0] == *(int *)sum2 && arr[1] == *(int *)sum1)
+    if (arr[0] == *(int*)sum2 && arr[1] == *(int*)sum1)
         printf("Amicable Numbers\n");
     else
         printf("Not Amicable Numbers\n");
@@ -42,9 +42,9 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void *sum(void *args)
+void* sum(void* args)
 {
-    int num = *(int *)args;
+    int num = *(int*)args;
     int sum = 1;
 
     // look for divisors
@@ -55,13 +55,18 @@ void *sum(void *args)
             sum += i;
             int temp = num / i;
 
-            if (i != temp)
-                sum += temp;
+            if (i != temp) sum += temp;
         }
     }
 
     // allocate memory for sum
-    int *result = malloc(sizeof(int));
+    int* result = malloc(sizeof(int));
+    if (result == NULL)
+    {
+        perror("allocation failed");
+        return NULL;
+    }
+
     *result = sum;
 
     return result;
