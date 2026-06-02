@@ -6,8 +6,8 @@
 
 sem_t filled;
 
-void* Produce();
-void* Collect();
+void *Produce();
+void *Collect();
 
 int main()
 {
@@ -26,7 +26,7 @@ int main()
 }
 
 // Produces item every 2 seconds
-void* Produce()
+void *Produce()
 {
     while (1)
     {
@@ -39,7 +39,7 @@ void* Produce()
 }
 
 // Collects only 2 items
-void* Collect()
+void *Collect()
 {
     while (1)
     {
