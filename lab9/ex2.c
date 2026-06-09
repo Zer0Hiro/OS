@@ -6,7 +6,6 @@
 
 #define N 10
 
-sem_t mutex;
 sem_t full;       // Taxi is full
 sem_t freeSpace;  // Shere is still free space for another student
 sem_t arrived;    // Arrive to braude
@@ -22,7 +21,6 @@ int main(int argc, char* argv[])
     int stdns[N];
 
     // Init semaphores
-    sem_init(&mutex, 0, 1);
     sem_init(&full, 0, 0);
     sem_init(&freeSpace, 0, 4);
     sem_init(&arrived, 0, 0);
@@ -46,16 +44,12 @@ void* passenger(void* arg)
 {
     int id = *((int*)arg);
 
-    sem_wait(&mutex);
     printf("Student #%d start\n", id);
-    sem_post(&mutex);
 
     // Check if there is still free space in Taxi
     sem_wait(&freeSpace);
 
-    sem_wait(&mutex);
     printf("Student #%d is in the TAXI\n", id);
-    sem_post(&mutex);
 
     // Take one seat
     sem_post(&full);
@@ -63,9 +57,7 @@ void* passenger(void* arg)
     // Wait until arrive to Braude
     sem_wait(&arrived);
 
-    sem_wait(&mutex);
     printf("Student #%d arrived. Out of TAXI\n", id);
-    sem_post(&mutex);
 
     // Leave taxi
     sem_post(&emptyTaxi);
@@ -82,16 +74,12 @@ void* TAXI(void* arg)
         sem_wait(&full);
         sem_wait(&full);
 
-        sem_wait(&mutex);
         printf("Taxi Left Station\n");
-        sem_post(&mutex);
 
         // Drive
         sleep(5);
 
-        sem_wait(&mutex);
         printf("Taxi Arrived\n");
-        sem_post(&mutex);
 
         // Tell 4 students they can leave
         sem_post(&arrived);
